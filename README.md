@@ -1,4 +1,4 @@
-# jira-metrics
+# Jira Metrics
 
 A small Java tool to generate a CSV report of Jira tickets and their cycle time (in days) for specified Jira issues and states.
 
