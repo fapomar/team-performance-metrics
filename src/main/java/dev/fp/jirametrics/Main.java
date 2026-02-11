@@ -17,13 +17,12 @@ public class Main {
 
         JiraService jiraService = new JiraInstance(jiraURL, username, apiToken);
 
-        // JIRA 'resolution' field (date) cannot be trusted in my Jira instance because it was only setup corretly in 23/04/2024
-        String jqlQuery = "project = <MYPROJECT> AND type in (Bug, Story, Task) AND Status=Done AND updated >= YYYY-MM-DD AND updated <= YYYY-MM-DD";
+        // WARNING! First date inclusive, second date exclusive (JIRA quirk)
+        String jqlQuery = "type in (Bug, Story, Task) AND Status=Done AND resolved >= YYYY-MM-DD AND resolved <= YYYY-MM-DD ORDER BY updatedDate";
 
         // Gives flexibility to consider specific states (e.g., maintaining backward compatibility with old boards' states)
         LinkedList<String> validStateNames = new LinkedList<>();
-        validStateNames.add("COLUMN NAME");
-        validStateNames.add("ANOTHER COLUMN NAME");
+        validStateNames.add("In Progress");
         Report report = jiraService.getReport(jqlQuery, validStateNames);
 
         System.out.println(report);

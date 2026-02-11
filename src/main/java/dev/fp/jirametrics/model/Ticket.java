@@ -8,9 +8,11 @@ import java.util.LinkedList;
 @Getter
 @Setter
 public class Ticket {
-    private String id;
-    private String summary;
-    private String type;
+    private String id = null;
+    private String summary = null;
+    private String type = null;
+    private Double estimate = null;
+    private String lastDoneDate = null;
     private LinkedList<State> allStates = new LinkedList<>();
 
     public Integer getCycleTimeInDays(LinkedList<String> validStateNames) {

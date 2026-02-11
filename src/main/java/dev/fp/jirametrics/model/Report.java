@@ -22,12 +22,14 @@ public class Report {
     @Override
     public String toString() {
         StringBuilder csv = new StringBuilder();
-        csv.append("ID, Type, Summary, Cycle Time (days)\n");
+        csv.append("ID, Done, Type, Summary, Cycle Time (days), Story Points\n");
         tickets.forEach(ticket -> {
             csv.append(ticket.getId()).append(",");
+            csv.append(ticket.getLastDoneDate()).append(",");
             csv.append(ticket.getType()).append(",");
             csv.append(ticket.getSummary()).append(",");
-            csv.append(ticket.getCycleTimeInDays(this.validStateNames));
+            csv.append(ticket.getCycleTimeInDays(this.validStateNames)).append(",");
+            csv.append(ticket.getEstimate());
             csv.append("\n");
         });
         return csv.toString();

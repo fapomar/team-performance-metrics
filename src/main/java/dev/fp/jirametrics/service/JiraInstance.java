@@ -4,6 +4,7 @@ import com.atlassian.jira.rest.client.api.IssueRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup;
 import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,9 @@ public class JiraInstance implements JiraService, AutoCloseable {
         ticket.setId(jiraIssue.getKey());
         ticket.setSummary(jiraIssue.getSummary().replaceAll(",", ""));
         ticket.setType(jiraIssue.getIssueType().getName());
+
+        // WARNING: Story Points is a custom field; remove the following line if not present in your Jira Instance
+        ticket.setEstimate((Double)jiraIssue.getFieldByName("Story Points").getValue());
 
         // 2. Process "transitions" so we can create "states" later
         LinkedList<JiraInstance.Transition> transitions = new LinkedList<>();
@@ -97,6 +101,13 @@ public class JiraInstance implements JiraService, AutoCloseable {
 
                 allStates.add(state);
             }
+
+            // Hack alert! The only way to establish "done date" is to retrieve the timestamp of last state transition
+            if (isLast) {
+                DateTime timestamp = transition.getTimestamp();
+                ticket.setLastDoneDate(timestamp.toString("yyyy-MM-dd"));
+            }
+
         });
 
         ticket.setAllStates(allStates);
