@@ -1,5 +1,5 @@
 app.jiraURL =
 app.username =
 app.apiToken =
-app.jql =
-app.validStateNames =
+app.jql = project = XYZ type in (Bug, Story, Task) AND Status=Done AND resolved >= 2026-01-14 AND resolved <= 2026-02-11 ORDER BY updatedDate
+app.validStateNames = In Progress, Ready for Validation, Blocked
